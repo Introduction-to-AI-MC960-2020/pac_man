@@ -15,7 +15,7 @@ def plot_maze_search_path(start, goal, map, reached, seq, animate):
 
     for node in reached: # reached[1] == start, reached[-1] == goal
         i, j = node
-        mmap[i][j] = 6 if animate else 4
+        mmap[i][j] = 75
         if animate:
             mmap[last[0]][last[1]] = 4
             last = node
