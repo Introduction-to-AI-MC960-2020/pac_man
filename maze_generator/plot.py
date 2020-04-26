@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
-from maze_generator.state import WALL
+from maze_generator.state import WALL, FREE, COIN
 
 def plot_maze_search_path(start, goal, map, reached, seq, animate):
-    mmap = [row[:] for row in map]
-    mmap[start[0]][start[1]] = 16
-    mmap[goal[0]][goal[1]] = 16
+    mmap = [[255 if x == WALL else (0 if x == FREE else (160 if x == COIN else 100)) for x in row][:] for row in map]
+    mmap[start[0]][start[1]] = 150
+    mmap[goal[0]][goal[1]] = 200
     reached = [node for node in reached if node != start and node != goal]
 
     if animate:
@@ -33,7 +33,7 @@ def plot_maze_search_path(start, goal, map, reached, seq, animate):
             plt.pause(frame_pause)
 
     if not animate:
-        plt.matshow(mmap, fignum=0, cmap='gray')
+        plt.matshow(mmap, fignum=0, vmin=0, vmax=255, cmap='tab20b_r')
     plt.axis('off')
     plt.show()
 
