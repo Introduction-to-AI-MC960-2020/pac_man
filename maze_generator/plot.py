@@ -32,9 +32,10 @@ def plot_maze_search_path(start, goal, map, reached, seq, animate):
             plt.matshow(mmap, fignum=0)
             plt.pause(frame_pause)
 
+    plt.axis('off')
     if not animate:
         plt.matshow(mmap, fignum=0, vmin=0, vmax=255, cmap='tab20b_r')
-    plt.axis('off')
+        plt.savefig('./output_search/{}-{}.png'.format(str(start),str(goal)))
     plt.show()
 
 def save_heatmap(start, goal, map, reached, seq, file_name):
