@@ -13,6 +13,7 @@ from utils import *
 # ______________________________________________________________________________
 # Uninformed Search algorithms
 
+
 def breadth_first_tree_search(problem):
     """
     [Figure 3.7]
@@ -68,8 +69,11 @@ def depth_first_graph_search(problem):
         if problem.goal_test(node.state):
             return node
         explored.add(node.state)
-        frontier.extend(child for child in node.expand(problem)
-                        if child.state not in explored and child not in frontier)
+        frontier.extend(
+            child
+            for child in node.expand(problem)
+            if child.state not in explored and child not in frontier
+        )
     return None
 
 
@@ -103,16 +107,21 @@ def best_first_graph_search(problem, f, display=False):
     There is a subtlety: the line "f = memoize(f, 'f')" means that the f
     values will be cached on the nodes as they are computed. So after doing
     a best first search you can examine the f values of the path returned."""
-    f = memoize(f, 'f')
+    f = memoize(f, "f")
     node = Node(problem.initial)
-    frontier = PriorityQueue('min', f)
+    frontier = PriorityQueue("min", f)
     frontier.append(node)
     explored = set()
     while frontier:
         node = frontier.pop()
         if problem.goal_test(node.state):
             if display:
-                print(len(explored), "paths have been expanded and", len(frontier), "paths remain in the frontier")
+                print(
+                    len(explored),
+                    "paths have been expanded and",
+                    len(frontier),
+                    "paths remain in the frontier",
+                )
             return node
         explored.add(node.state)
         for child in node.expand(problem):
@@ -137,16 +146,16 @@ def depth_limited_search(problem, limit=50):
         if problem.goal_test(node.state):
             return node
         elif limit == 0:
-            return 'cutoff'
+            return "cutoff"
         else:
             cutoff_occurred = False
             for child in node.expand(problem):
                 result = recursive_dls(child, problem, limit - 1)
-                if result == 'cutoff':
+                if result == "cutoff":
                     cutoff_occurred = True
                 elif result is not None:
                     return result
-            return 'cutoff' if cutoff_occurred else None
+            return "cutoff" if cutoff_occurred else None
 
     # Body of depth_limited_search:
     return recursive_dls(Node(problem.initial), problem, limit)
@@ -156,13 +165,14 @@ def iterative_deepening_search(problem):
     """[Figure 3.18]"""
     for depth in range(sys.maxsize):
         result = depth_limited_search(problem, depth)
-        if result != 'cutoff':
+        if result != "cutoff":
             return result
 
 
 # ______________________________________________________________________________
 # Bidirectional Search
 # Pseudocode from https://webdocs.cs.ualberta.ca/%7Eholte/Publications/MM-AAAI2016.pdf
+
 
 def bidirectional_search(problem):
     e = 0
@@ -254,8 +264,9 @@ def astar_search(problem, h=None, display=False):
     """A* search is best-first graph search with f(n) = g(n)+h(n).
     You need to specify the h function when you call astar_search, or
     else in your Problem subclass."""
-    h = memoize(h or problem.h, 'h')
+    h = memoize(h or problem.h, "h")
     return best_first_graph_search(problem, lambda n: n.path_cost + h(n), display)
+
 
 # ______________________________________________________________________________
 # Other search algorithms
@@ -263,7 +274,7 @@ def astar_search(problem, h=None, display=False):
 
 def recursive_best_first_search(problem, h=None):
     """[Figure 3.26]"""
-    h = memoize(h or problem.h, 'h')
+    h = memoize(h or problem.h, "h")
 
     def RBFS(problem, node, flimit):
         if problem.goal_test(node.state):
@@ -304,7 +315,9 @@ def hill_climbing(problem):
         neighbors = current.expand(problem)
         if not neighbors:
             break
-        neighbor = argmax_random_tie(neighbors, key=lambda node: problem.value(node.state))
+        neighbor = argmax_random_tie(
+            neighbors, key=lambda node: problem.value(node.state)
+        )
         if problem.value(neighbor.state) <= problem.value(current.state):
             break
         current = neighbor
@@ -370,8 +383,7 @@ def and_or_graph_search(problem):
         if state in path:
             return None
         for action in problem.actions(state):
-            plan = and_search(problem.result(state, action),
-                              problem, path + [state, ])
+            plan = and_search(problem.result(state, action), problem, path + [state])
             if plan is not None:
                 return [action, plan]
 
