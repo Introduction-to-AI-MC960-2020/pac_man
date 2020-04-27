@@ -1,12 +1,11 @@
 from random import shuffle
 import math
 
-from problem import Problem
-import maze
+from pac_man.problem import Problem
+from pac_man import maze
 
 
 class PacManProblem(Problem):
-    index_by = lambda ij, m: m[ij[0]][ij[1]]
 
     """
     Parameters
@@ -25,14 +24,18 @@ class PacManProblem(Problem):
     """
 
     def __init__(self, initial, goal, maze_map, shuffle_actions_list=False):
-        assert index_by(initial, maze_map) == maze.START
-        assert index_by(goal, maze_map) == maze.GOAL
+        assert self.index_by(initial, maze_map) == maze.START
+        assert self.index_by(goal, maze_map) == maze.GOAL
 
-        Problem.__init__(self, self.initial, self.goal)
+        Problem.__init__(self, initial, goal)
         self.maze = maze_map
         self.height = len(maze_map)
         self.width = len(maze_map[0])
         self.shuffle_actions_list = shuffle_actions_list
+
+    @staticmethod
+    def index_by(ij, map_):
+        return map_[ij[0]][ij[1]]
 
     def __is_valid_pos(self, pos):
         i, j = pos
