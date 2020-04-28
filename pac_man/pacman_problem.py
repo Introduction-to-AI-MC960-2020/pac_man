@@ -2,7 +2,7 @@ from random import shuffle
 import math
 
 from pac_man.problem import Problem
-from pac_man import maze
+from pac_man.maze_generator import state
 
 
 class PacManProblem(Problem):
@@ -24,8 +24,8 @@ class PacManProblem(Problem):
     """
 
     def __init__(self, initial, goal, maze_map, shuffle_actions_list=False):
-        assert self.index_by(initial, maze_map) == maze.START
-        assert self.index_by(goal, maze_map) == maze.GOAL
+        assert self.index_by(initial, maze_map) == state.START
+        assert self.index_by(goal, maze_map) == state.GOAL
 
         Problem.__init__(self, initial, goal)
         self.maze = maze_map
@@ -44,8 +44,8 @@ class PacManProblem(Problem):
             and i < self.height
             and 0 <= j
             and j < self.width
-            and self.maze[i][j] != maze.GHOST
-            and self.maze[i][j] != maze.WALL
+            and self.maze[i][j] != state.GHOST
+            and self.maze[i][j] != state.WALL
         )
 
     def __is_valid_move(self, from_pos, to_pos):
@@ -134,10 +134,10 @@ class PacManProblem(Problem):
     def value(self, state):
         i, j = state
 
-        if self.maze[i][j] == maze.FREE:
+        if self.maze[i][j] == state.FREE:
             return 1
 
-        if self.maze[i][j] == maze.COIN:
+        if self.maze[i][j] == state.COIN:
             return 2
 
         return -math.inf
