@@ -1,3 +1,4 @@
+from pytest import raises
 from pac_man.pacman_problem import PacManProblem
 
 
