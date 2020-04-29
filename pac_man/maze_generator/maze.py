@@ -1,5 +1,5 @@
-from maze_generator.state import START, GOAL, GHOST
-from maze_generator.plot import plot_maze_search_path
+from pac_man.maze_generator.state import START, GOAL, GHOST
+from pac_man.maze_generator.plot import plot_maze_search_path
 
 class MazePacman():
   def __init__(self, start_position, goal_position, ghosts_position, maze_map):

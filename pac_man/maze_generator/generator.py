@@ -1,4 +1,4 @@
-from maze_generator.maze import MazePacman
+from pac_man.maze_generator.maze import MazePacman
 
 # 7 x 7
 MAZE_1 = MazePacman((5,1), (1,5), [(1,2),(1,4),(4,4)],

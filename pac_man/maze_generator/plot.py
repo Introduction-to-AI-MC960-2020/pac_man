@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from maze_generator.state import WALL, FREE, COIN
+from pac_man.maze_generator.state import WALL, FREE, COIN
 
 def plot_maze_search_path(start, goal, map, reached, seq, animate):
     mmap = [[255 if x == WALL else (0 if x == FREE else (160 if x == COIN else 100)) for x in row][:] for row in map]
