@@ -20,6 +20,5 @@ class MazePacman():
       self.maze_map[second_ghost_position[0]][second_ghost_position[1]] = GHOST
       self.maze_map[third_ghost_position[0]][third_ghost_position[1]] = GHOST
 
-  def show_search_path(self, reached=[], seq=[]):
-    plot_maze_search_path(self.start_position, self.goal_position, 
-      self.maze_map, reached, seq, False)
+  def show_search_path(self, reached=[]):    
+    plot_maze_search_path(self.start_position, self.goal_position, self.maze_map, reached)

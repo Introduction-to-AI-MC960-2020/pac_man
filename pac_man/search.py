@@ -8,7 +8,9 @@ functions.
 import sys
 from collections import deque
 
-from utils import *
+from pac_man.utils import *
+from pac_man.node import Node
+
 
 # ______________________________________________________________________________
 # Uninformed Search algorithms

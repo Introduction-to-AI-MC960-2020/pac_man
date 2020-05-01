@@ -107,7 +107,7 @@ class PacManProblem(Problem):
     """
 
     def path_cost(self, cost_so_far, current_pos, action, next_pos):
-        if action == next_pos and self.__valid_move(current_pos, next_pos):
+        if action == next_pos and self.__is_valid_move(current_pos, next_pos):
             return cost_so_far + 1
 
         return math.inf
