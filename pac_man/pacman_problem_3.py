@@ -111,9 +111,9 @@ class PacManProblem3(Problem):
         if action == next_pos and self.__is_valid_move(current_pos, next_pos):  
            i, j = next_pos
            if self.maze[i][j] == state.COIN:
-             return cost_so_far - 100
+             return cost_so_far - 1
 
-           return cost_so_far + 1
+           return cost_so_far
 
         return math.inf
 
