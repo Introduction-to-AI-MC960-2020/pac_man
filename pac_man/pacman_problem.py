@@ -3,7 +3,7 @@ import math
 
 from pac_man.problem import Problem
 from pac_man.maze_generator import state
-
+from pac_man.utils import manhattan_distance
 
 class PacManProblem(Problem):
 
@@ -23,7 +23,7 @@ class PacManProblem(Problem):
           F - pacman's target (goal) position
     """
 
-    def __init__(self, initial, goal, maze_map, shuffle_actions_list=False):
+    def __init__(self, initial, goal, maze_map, max_coins=False, shuffle_actions_list=False):
         assert self.index_by(initial, maze_map) == state.START
         assert self.index_by(goal, maze_map) == state.GOAL
 
@@ -31,6 +31,7 @@ class PacManProblem(Problem):
         self.maze = maze_map
         self.height = len(maze_map)
         self.width = len(maze_map[0])
+        self.max_coins = max_coins
         self.shuffle_actions_list = shuffle_actions_list
 
     @staticmethod
@@ -64,7 +65,7 @@ class PacManProblem(Problem):
     """
 
     def actions(self, state):
-        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # left, top, right, bottom
+        directions = [(-1, 0), (0, 1), (1, 0), (0, -1)]  # left, bottom, right, top
 
         i, j = state
         actions_list = [(i + di, j + dj) for (di, dj) in directions]
@@ -106,9 +107,13 @@ class PacManProblem(Problem):
         pacman's next postition at the maze
     """
 
-    def path_cost(self, cost_so_far, current_pos, action, next_pos):
-        if action == next_pos and self.__is_valid_move(current_pos, next_pos):
-            return cost_so_far + 1
+    def path_cost(self, cost_so_far, current_pos, action, next_pos):        
+        if action == next_pos and self.__is_valid_move(current_pos, next_pos):  
+           i, j = next_pos
+           if self.maze[i][j] == state.COIN:
+             return cost_so_far - 2
+
+           return cost_so_far + 1
 
         return math.inf
 
@@ -119,8 +124,9 @@ class PacManProblem(Problem):
         for which we estimate the lowest path cost to the goal
     """
 
-    def h(self, state):
-        return manhattan(state, goal)
+    def h(self, node):      
+      return manhattan_distance(node.state, self.goal)
+      
 
     """
     Parameters
