@@ -134,13 +134,21 @@ class PacManProblem(Problem):
     optimise a value when we cannot do a goal test. Used in Hill-climbing algorithm.
     """
 
-    def value(self, coordinates):
-        i, j = coordinates
+    def value(self, curr_state):
+        i, j = curr_state
+        cell = self.maze[i][j]
 
-        if self.maze[i][j] == state.FREE:
-            return 1
+        distance = self.h(curr_state)
 
-        if self.maze[i][j] == state.COIN:
-            return 2
+        weights = {
+          state.FREE: 1,
+          state.COIN: 2,
+          state.GOAL: math.inf
+        }
+
+        if cell in weights:
+          divider = distance if distance != 0 else 1
+          return weights[cell] / divider
+
 
         return -math.inf

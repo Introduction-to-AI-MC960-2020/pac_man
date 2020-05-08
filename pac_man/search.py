@@ -312,18 +312,26 @@ def hill_climbing(problem):
     From the initial node, keep choosing the neighbor with highest value,
     stopping when no neighbor is better.
     """
+    states = []
     current = Node(problem.initial)
-    while True:
-        neighbors = current.expand(problem)
+
+    while current != problem.goal:
+        states.append(current.state)
+        all_neighbors = current.expand(problem)
+        neighbors = [n for n in all_neighbors if n.state not in states]
+
         if not neighbors:
             break
+
         neighbor = argmax_random_tie(
             neighbors, key=lambda node: problem.value(node.state)
         )
-        if problem.value(neighbor.state) <= problem.value(current.state):
-            break
+
+        # if problem.value(neighbor.state) < problem.value(current.state):
+        #     break
+
         current = neighbor
-    return current.state
+    return current.state, states
 
 
 def exp_schedule(k=20, lam=0.005, limit=100):
@@ -349,7 +357,7 @@ def simulated_annealing(problem, schedule=exp_schedule()):
 
 
 def simulated_annealing_full(problem, schedule=exp_schedule()):
-    """ This version returns all the states encountered in reaching 
+    """ This version returns all the states encountered in reaching
     the goal state."""
     states = []
     current = Node(problem.initial)
