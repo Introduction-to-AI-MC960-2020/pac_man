@@ -34,6 +34,22 @@ class PacManProblem(Problem):
         self.max_coins = max_coins
         self.shuffle_actions_list = shuffle_actions_list
         self.heuristic = heuristic
+        self.coins_eaten = set()
+        self.visit_count = {}
+
+    def record_choice(self, curr_node):
+      curr_state = curr_node.state
+      i, j = curr_state
+      cell = self.maze[i][j]
+
+      if cell == state.COIN:
+        self.coins_eaten.add(curr_state)
+
+      if curr_state in self.visit_count:
+        self.visit_count[curr_state] += 1
+      else:
+        self.visit_count[curr_state] = 1
+
 
     @staticmethod
     def index_by(ij, map_):
@@ -108,8 +124,8 @@ class PacManProblem(Problem):
         pacman's next postition at the maze
     """
 
-    def path_cost(self, cost_so_far, current_pos, action, next_pos):        
-        if action == next_pos and self.__is_valid_move(current_pos, next_pos):  
+    def path_cost(self, cost_so_far, current_pos, action, next_pos):
+        if action == next_pos and self.__is_valid_move(current_pos, next_pos):
            return cost_so_far + 1
 
         return math.inf
@@ -121,9 +137,9 @@ class PacManProblem(Problem):
         for which we estimate the lowest path cost to the goal
     """
 
-    def h(self, node):  
-      return self.heuristic(node, self.goal, self.maze)         
-      
+    def h(self, node):
+      return self.heuristic(node, self.goal, self.maze)
+
 
     """
     Parameters
@@ -134,13 +150,28 @@ class PacManProblem(Problem):
     optimise a value when we cannot do a goal test. Used in Hill-climbing algorithm.
     """
 
-    def value(self, state):
-        i, j = state
+    def value(self, curr_state):
+        i, j = curr_state
+        cell = self.maze[i][j]
 
-        if self.maze[i][j] == state.FREE:
-            return 1
+        distance = self.h(curr_state)
 
-        if self.maze[i][j] == state.COIN:
-            return 2
+        weights = {
+          state.FREE: 1,
+          state.COIN: 2,
+          state.GOAL: math.inf
+        }
+
+        weight = weights.get(cell)
+
+        visit_count = self.visit_count.get(curr_state, 0)
+
+        if curr_state in self.coins_eaten:
+          weight = state.FREE
+
+        if cell in weights:
+          divider = distance if distance != 0 else 1
+          return (weights[cell] / divider) - visit_count
+
 
         return -math.inf
