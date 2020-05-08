@@ -34,6 +34,22 @@ class PacManProblem(Problem):
         self.max_coins = max_coins
         self.shuffle_actions_list = shuffle_actions_list
         self.heuristic = heuristic
+        self.coins_eaten = set()
+        self.visit_count = {}
+
+    def record_choice(self, curr_node):
+      curr_state = curr_node.state
+      i, j = curr_state
+      cell = self.maze[i][j]
+
+      if cell == state.COIN:
+        self.coins_eaten.add(curr_state)
+
+      if curr_state in self.visit_count:
+        self.visit_count[curr_state] += 1
+      else:
+        self.visit_count[curr_state] = 1
+
 
     @staticmethod
     def index_by(ij, map_):
@@ -146,9 +162,16 @@ class PacManProblem(Problem):
           state.GOAL: math.inf
         }
 
+        weight = weights.get(cell)
+
+        visit_count = self.visit_count.get(curr_state, 0)
+
+        if curr_state in self.coins_eaten:
+          weight = state.FREE
+
         if cell in weights:
           divider = distance if distance != 0 else 1
-          return weights[cell] / divider
+          return (weights[cell] / divider) - visit_count
 
 
         return -math.inf

@@ -314,11 +314,18 @@ def hill_climbing(problem):
     """
     states = []
     current = Node(problem.initial)
+    dead_ends = set()
 
-    while current != problem.goal:
+    while current.state != problem.goal:
         states.append(current.state)
         all_neighbors = current.expand(problem)
-        neighbors = [n for n in all_neighbors if n.state not in states]
+        neighbors = [n for n in all_neighbors if n.state not in dead_ends]
+
+        # if the current node has only one neighbor and it is equal to the
+        # last visited node, it is a dead end
+        if len(neighbors) == 1 and len(states) > 1 and neighbors[0].state == states[-2]:
+            dead_ends.add(current.state)
+
 
         if not neighbors:
             break
@@ -327,10 +334,12 @@ def hill_climbing(problem):
             neighbors, key=lambda node: problem.value(node.state)
         )
 
-        # if problem.value(neighbor.state) < problem.value(current.state):
-        #     break
+        #if problem.value(neighbor.state) < problem.value(current.state):
+        #    break
 
         current = neighbor
+        problem.record_choice(current)
+
     return current.state, states
 
 
