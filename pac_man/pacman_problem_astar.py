@@ -108,8 +108,8 @@ class PacManProblem(Problem):
         pacman's next postition at the maze
     """
 
-    def path_cost(self, cost_so_far, current_pos, action, next_pos):        
-        if action == next_pos and self.__is_valid_move(current_pos, next_pos):  
+    def path_cost(self, cost_so_far, current_pos, action, next_pos):
+        if action == next_pos and self.__is_valid_move(current_pos, next_pos):
            return cost_so_far + 1
 
         return math.inf
@@ -121,9 +121,9 @@ class PacManProblem(Problem):
         for which we estimate the lowest path cost to the goal
     """
 
-    def h(self, node):  
-      return self.heuristic(node, self.goal, self.maze)         
-      
+    def h(self, node):
+      return self.heuristic(node, self.goal, self.maze)
+
 
     """
     Parameters
@@ -134,8 +134,8 @@ class PacManProblem(Problem):
     optimise a value when we cannot do a goal test. Used in Hill-climbing algorithm.
     """
 
-    def value(self, state):
-        i, j = state
+    def value(self, coordinates):
+        i, j = coordinates
 
         if self.maze[i][j] == state.FREE:
             return 1
